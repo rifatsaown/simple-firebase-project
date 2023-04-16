@@ -1,25 +1,71 @@
-import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
+import {
+  GithubAuthProvider,
+  GoogleAuthProvider,
+  getAuth,
+  signInWithPopup,
+  signOut,
+} from "firebase/auth";
 import React from "react";
 import app from "../firebase/firebase.init";
 
 const Login = () => {
+  const [user, setUser] = React.useState(null);
+
   const auth = getAuth(app);
-  const provider = new GoogleAuthProvider();
+  const googleProvider = new GoogleAuthProvider();
+  const githubProvider = new GithubAuthProvider();
 
   const handleGoogleLogin = () => {
-    signInWithPopup(auth, provider)
+    signInWithPopup(auth, googleProvider)
       .then((result) => {
-        const user = result.user;
-        console.log(user);
+        setUser(result.user);
       })
       .catch((error) => {
-        console.log( 'error',error.message);
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+      });
+  };
+
+  const handleGithubLogin = () => {
+    signInWithPopup(auth, githubProvider)
+      .then((result) => {
+        setUser(result.user);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+      });
+  };
+
+  const handleSignOut = () => {
+    signOut(auth)
+      .then(() => {
+        setUser(null);
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
 
   return (
     <div>
-      <button onClick={handleGoogleLogin}>Google Login</button>
+      {user ? (
+        <button onClick={handleSignOut}>Sign Out</button>
+      ) : (
+        <>
+          <button onClick={handleGithubLogin}>Github Login</button>
+          <button onClick={handleGoogleLogin}>Google Login</button>
+        </>
+      )}
+      {user && (
+        <div>
+          <h2>{user.displayName}</h2>
+          <p>{user.email}</p>
+          <img src={user.photoURL} alt="" />
+        </div>
+      )}
     </div>
   );
 };
