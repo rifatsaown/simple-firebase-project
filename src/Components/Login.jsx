@@ -55,6 +55,24 @@ const Login = () => {
         <button onClick={handleSignOut}>Sign Out</button>
       ) : (
         <>
+        <h3>Log In With Password</h3>
+          <form>
+            <input
+              type="email"
+              name="username"
+              id="username"
+              placeholder="Your Email"
+            />
+            <br />
+            <input
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Your Password"
+            />
+            <br />
+            <input type="submit" value="Log In" />
+          </form>
           <button onClick={handleGithubLogin}>Github Login</button>
           <button onClick={handleGoogleLogin}>Google Login</button>
         </>
