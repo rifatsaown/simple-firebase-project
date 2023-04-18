@@ -8,7 +8,6 @@ const Register = () => {
 
   const auth = getAuth(app);
   
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setSuccess("");
